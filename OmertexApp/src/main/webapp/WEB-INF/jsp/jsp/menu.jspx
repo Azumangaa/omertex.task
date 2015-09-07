@@ -1,0 +1,10 @@
+<div class="header clearfix">
+	<nav>
+		<ul class="nav nav-pills pull-right">
+			<li role="presentation" class="active"><a href="/task/">Home</a></li>
+			<li role="presentation"><a href="/task/inquiries/1">Inquiries</a></li>
+			<li role="presentation"><a href="/task/topics/1">Topics</a></li>
+		</ul>
+	</nav>
+	<h3 class="text-muted">Omertex Task</h3>
+</div>
