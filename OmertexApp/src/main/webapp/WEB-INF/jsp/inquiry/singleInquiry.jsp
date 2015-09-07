@@ -28,8 +28,8 @@
 		<div class="row marketing">
 			<div class="row center">
 				<form:form
-					action="${pageContext.request.contextPath}/customer/${inquiry.customer}/inquiry"
-					commandName="inquiry" method="POST" enctype="utf8" role="form">
+					action="${pageContext.request.contextPath}/customer/${inquiry.customer}/inquiry/${inquiryId}"
+					commandName="inquiry" method="PUT" enctype="utf8" role="form">
 					<div id="form-group-description" class="form-group">
 						<label class="control-label" for="inputSuccess2"></label> <label
 							class="control-label" for="inquiry-description">Inquiry
@@ -57,6 +57,14 @@
 								</tr>
 							</thead>
 							<tbody id="Attributes">
+								<c:forEach items="${inquiry.attributes}" var="attr" varStatus="attrStatus">
+									<td>
+										<form:input cssClass="form-control" path="attributes[${attrStatus.index}].name"/>
+									</td>
+									<td>
+										<form:input cssClass="form-control" path="attributes[${attrStatus.index}].value"/>
+									</td>
+								</c:forEach>
 							</tbody>
 						</table>
 						<a href="#" id="addNewAttribute">Add new attribute</a>
@@ -64,15 +72,15 @@
 					<div id="form-group-topic" class="form-group">
 						<label class="control-label" for="inputSuccess2"></label> <label
 							class="control-label" for="">Topic:</label>
-						<form:select path="topic">
-							<c:forEach items="${topics}" var="topic">
-								<form:option value="${topic.id}">
-									<c:out value="${topic.name}"></c:out>
-								</form:option>
-							</c:forEach>
-						</form:select>
+							<form:select path="topic">
+								<c:forEach items="${topics}" var="topic">
+									<form:option value="${topic.id}">
+										<c:out value="${topic.name}"></c:out>
+									</form:option>
+								</c:forEach>
+							</form:select>
 					</div>
-					<form:hidden path="customerId" />
+					<form:hidden path="customerId"/>
 					<button type="submit" class="btn btn-primary btn-lg btn-block">
 						Add inquiry</button>
 				</form:form>

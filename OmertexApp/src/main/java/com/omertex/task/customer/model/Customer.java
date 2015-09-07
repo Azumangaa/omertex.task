@@ -2,6 +2,7 @@ package com.omertex.task.customer.model;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,7 +22,7 @@ public class Customer extends BaseEntity<Long>
     @Column (name = "name", length = 255, nullable = false, unique = true)
     private String name;
 
-    @OneToMany (mappedBy = "customer", targetEntity = Inquiry.class)
+    @OneToMany (mappedBy = "customer", targetEntity = Inquiry.class, cascade = CascadeType.ALL)
     private List<Inquiry> inquiries;
 
 

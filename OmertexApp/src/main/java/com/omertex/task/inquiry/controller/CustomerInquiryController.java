@@ -17,6 +17,7 @@ import com.omertex.task.customer.model.Customer;
 import com.omertex.task.customer.repository.CustomerRepository;
 import com.omertex.task.inquiry.dto.InquiryForm;
 import com.omertex.task.inquiry.model.Inquiry;
+import com.omertex.task.inquiry.repository.InquiryRepository;
 import com.omertex.task.inquiry.service.RepositoryInquiryService;
 import com.omertex.task.topic.model.Topic;
 import com.omertex.task.topic.repository.TopicRepository;
@@ -27,16 +28,17 @@ public class CustomerInquiryController
     private CustomerRepository customerRepository;
     private RepositoryInquiryService inquiryService;
     private TopicRepository topicRepository;
+    private InquiryRepository inquiryRepository;
 
 
     @Autowired
     public CustomerInquiryController (CustomerRepository repository, TopicRepository topicRepository,
-	    RepositoryInquiryService inquiryService)
+	    RepositoryInquiryService inquiryService, InquiryRepository inquiryRepository)
     {
 	this.customerRepository = repository;
 	this.topicRepository = topicRepository;
 	this.inquiryService = inquiryService;
-
+	this.inquiryRepository = inquiryRepository;
     }
 
 
@@ -72,20 +74,31 @@ public class CustomerInquiryController
     public String saveInquiry (@ModelAttribute ("inquiry") InquiryForm inquiryData,
 	    @PathVariable ("customerName") String customerName, BindingResult result)
     {
-	// if (result.hasErrors ())
-	// return "/customer/" + customerName + "/newInquiry";
+	if (result.hasErrors ())
+	    return "/customer/" + customerName + "/newInquiry";
 	Inquiry inquiry = inquiryService.addInquiry (inquiryData);
 	return "redirect:/customer/" + customerName + "/inquiry/" + inquiry.getId ();
     }
 
-    /*
-     * @RequestMapping (value = "/customer/{customerName}/inquiry/{inquiryId}",
-     * method = RequestMethod.GET) public String showSingleInquiry
-     * (@PathVariable ("customerName") String customerName, @PathVariable
-     * ("inquiryId") Long inquiryId, Model model) {
-     * 
-     * return }
-     */
+
+    @RequestMapping (value = "/customer/{customerName}/inquiry/{inquiryId}", method = RequestMethod.GET)
+    public String showSingleInquiry (@PathVariable ("customerName") String customerName,
+	    @PathVariable ("inquiryId") Long inquiryId, Model model)
+    {
+	InquiryForm dto = getInquiryForm ();
+	Inquiry inquiry = inquiryRepository.findOne (inquiryId);
+	dto.setAttributes (inquiry.getInquiryAttributes ());
+	dto.setCustomer (inquiry.getCustomer ());
+	dto.setDescription (inquiry.getDescription ());
+	dto.setTopic (inquiry.getTopic ().getId ());
+	List<Topic> topics = topicRepository.findAll ();
+
+	model.addAttribute ("inquiry", dto);
+	model.addAttribute ("inquiryId", inquiry.getId ());
+	model.addAttribute ("topics", topics);
+
+	return "/inquiry/singleInquiry";
+    }
 
 
     // For ajax append attribute field

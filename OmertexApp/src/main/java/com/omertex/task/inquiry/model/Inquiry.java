@@ -2,8 +2,10 @@ package com.omertex.task.inquiry.model;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -30,7 +32,8 @@ public class Inquiry extends BaseEntity<Long>
     @JoinColumn (name = "customer_id", nullable = false)
     private Customer customer;
 
-    @OneToMany (mappedBy = "inquiry", targetEntity = InquiryAttribute.class)
+    @OneToMany (mappedBy = "inquiry", targetEntity = InquiryAttribute.class, cascade = CascadeType.ALL,
+	    fetch = FetchType.EAGER)
     private List<InquiryAttribute> inquiryAttributes;
 
     @OneToOne

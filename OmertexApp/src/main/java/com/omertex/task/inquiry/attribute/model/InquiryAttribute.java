@@ -23,6 +23,10 @@ public class InquiryAttribute extends BaseEntity<Long>
     @Column (name = "value", length = 255)
     private String value;
 
+    @ManyToOne (optional = false)
+    @JoinColumn (name = "inquiry_id", nullable = false)
+    private Inquiry inquiry;
+
 
     public void setName (String name)
     {
@@ -34,11 +38,6 @@ public class InquiryAttribute extends BaseEntity<Long>
     {
 	this.value = value;
     }
-
-    @ManyToOne (optional = false)
-    @JoinColumn (name = "inquiry_id", nullable = false)
-    private Inquiry inquiry;
-
 
 
     public InquiryAttribute ()

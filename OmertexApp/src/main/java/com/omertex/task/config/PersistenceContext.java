@@ -1,6 +1,10 @@
 package com.omertex.task.config;
 
-import com.jolbox.bonecp.BoneCPDataSource;
+import java.util.Properties;
+
+import javax.annotation.Resource;
+import javax.sql.DataSource;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -10,9 +14,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import javax.annotation.Resource;
-import javax.sql.DataSource;
-import java.util.Properties;
+import com.jolbox.bonecp.BoneCPDataSource;
 
 @Configuration
 @EnableJpaRepositories (basePackages = { "com.omertex.task.topic.repository", "com.omertex.task.inquiry.repository",
@@ -35,6 +37,7 @@ public class PersistenceContext
     private static final String PROPERTY_NAME_HIBERNATE_HBM2DDL_AUTO = "hibernate.hbm2ddl.auto";
     private static final String PROPERTY_NAME_HIBERNATE_NAMING_STRATEGY = "hibernate.ejb.naming_strategy";
     private static final String PROPERTY_NAME_HIBERNATE_SHOW_SQL = "hibernate.show_sql";
+    private static final String PROPERTY_NAME_HIBERNATE_CHARSET_ENCODING = "hibernate.connection.characterEncoding";
 
     @Resource
     private Environment env;
@@ -84,6 +87,8 @@ public class PersistenceContext
 		env.getRequiredProperty (PROPERTY_NAME_HIBERNATE_NAMING_STRATEGY));
 	jpaProperties.put (PROPERTY_NAME_HIBERNATE_SHOW_SQL,
 		env.getRequiredProperty (PROPERTY_NAME_HIBERNATE_SHOW_SQL));
+	jpaProperties.put (PROPERTY_NAME_HIBERNATE_CHARSET_ENCODING,
+		env.getRequiredProperty (PROPERTY_NAME_HIBERNATE_CHARSET_ENCODING));
 
 	entityManagerFactoryBean.setJpaProperties (jpaProperties);
 
