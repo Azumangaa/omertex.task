@@ -15,34 +15,34 @@ import com.omertex.task.topic.model.Topic;
 import com.omertex.task.topic.repository.TopicRepository;
 import com.omertex.task.topic.service.RepositoryTopicService;
 
-public class TestRepositoryTopicService {
+public class TestRepositoryTopicService
+{
 
-	@Test
-	public void testGetTopics() {
-		Page<Topic> page = TestUtils.createTopicPage();
-		TopicRepository repo = mock(TopicRepository.class);
-		PageRequest pageRequest = new PageRequest(0, 
-				50, 
-				Sort.Direction.DESC, "creationTime" );
-		when(repo.findAll(pageRequest)).thenReturn(page);
-		RepositoryTopicService service = new RepositoryTopicService(repo);
-		
-		Page<Topic> page2 =  service.getTopics(1);
-		assertEquals(page2, page);
-	}
-	
-	
-	@Test
-	public void testAddDuplicateTopic()
-	{
-		TopicRepository repo = mock(TopicRepository.class);
-		Topic topic = Topic.getBuilder().name("Test").build();
-		when(repo.findByName("Test")).thenReturn(new ArrayList<Topic>());
-		when(repo.save(topic)).thenReturn(topic);
-		
-		RepositoryTopicService service = new RepositoryTopicService(repo);
-		Topic topic2 = service.addTopic("Test");
-		assertEquals(topic2, null);
-	}
-	
+    @Test
+    public void testGetTopics ()
+    {
+	Page<Topic> page = TestUtils.createTopicPage ();
+	TopicRepository repo = mock (TopicRepository.class);
+	PageRequest pageRequest = new PageRequest (0, 50, Sort.Direction.DESC, "creationTime");
+	when (repo.findAll (pageRequest)).thenReturn (page);
+	RepositoryTopicService service = new RepositoryTopicService (repo);
+
+	Page<Topic> page2 = service.getTopics (1);
+	assertEquals (page2, page);
+    }
+
+
+    @Test
+    public void testAddDuplicateTopic ()
+    {
+	TopicRepository repo = mock (TopicRepository.class);
+	Topic topic = Topic.getBuilder ().name ("Test").build ();
+	when (repo.findByName ("Test")).thenReturn (new ArrayList<Topic> ());
+	when (repo.save (topic)).thenReturn (topic);
+
+	RepositoryTopicService service = new RepositoryTopicService (repo);
+	Topic topic2 = service.addTopic ("Test");
+	assertEquals (topic2, null);
+    }
+
 }

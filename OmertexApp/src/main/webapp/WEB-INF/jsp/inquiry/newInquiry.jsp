@@ -66,6 +66,7 @@
 								</c:forEach>
 							</form:select>
 					</div>
+					<form:hidden path="customerId"/>
 					<button type="submit" class="btn btn-primary btn-lg btn-block">
 						Add inquiry</button>
 				</form:form>

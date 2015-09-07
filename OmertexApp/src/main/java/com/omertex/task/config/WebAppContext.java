@@ -15,57 +15,62 @@ import org.springframework.web.servlet.view.JstlView;
 import java.util.Properties;
 
 @Configuration
-@ComponentScan(basePackages = {
-        "com.omertex.task.common.controller",
-        "com.omertex.task.topic.controller",
-        "com.omertex.task.inquiry.controller",
-        "com.omertex.task.customer.controller"
-})
+@ComponentScan (basePackages = { "com.omertex.task.common.controller", "com.omertex.task.topic.controller",
+	"com.omertex.task.inquiry.controller", "com.omertex.task.customer.controller" })
 @EnableWebMvc
-public class WebAppContext extends WebMvcConfigurerAdapter {
+public class WebAppContext extends WebMvcConfigurerAdapter
+{
 
     private static final String VIEW_RESOLVER_PREFIX = "/WEB-INF/jsp/";
     private static final String VIEW_RESOLVER_SUFFIX = ".jsp";
 
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/static/**").addResourceLocations("/static/");
-    }
 
     @Override
-    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
-        configurer.enable();
+    public void addResourceHandlers (ResourceHandlerRegistry registry)
+    {
+	registry.addResourceHandler ("/static/**").addResourceLocations ("/static/");
     }
 
-    @Bean
-    public SimpleMappingExceptionResolver exceptionResolver() {
-        SimpleMappingExceptionResolver exceptionResolver = new SimpleMappingExceptionResolver();
 
-        Properties exceptionMappings = new Properties();
-
-        exceptionMappings.put("java.lang.Exception", "error/error");
-        exceptionMappings.put("java.lang.RuntimeException", "error/error");
-
-        exceptionResolver.setExceptionMappings(exceptionMappings);
-
-        Properties statusCodes = new Properties();
-
-        statusCodes.put("error/404", "404");
-        statusCodes.put("error/error", "500");
-
-        exceptionResolver.setStatusCodes(statusCodes);
-
-        return exceptionResolver;
+    @Override
+    public void configureDefaultServletHandling (DefaultServletHandlerConfigurer configurer)
+    {
+	configurer.enable ();
     }
 
+
     @Bean
-    public ViewResolver viewResolver() {
-        InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+    public SimpleMappingExceptionResolver exceptionResolver ()
+    {
+	SimpleMappingExceptionResolver exceptionResolver = new SimpleMappingExceptionResolver ();
 
-        viewResolver.setViewClass(JstlView.class);
-        viewResolver.setPrefix(VIEW_RESOLVER_PREFIX);
-        viewResolver.setSuffix(VIEW_RESOLVER_SUFFIX);
+	Properties exceptionMappings = new Properties ();
 
-        return viewResolver;
+	exceptionMappings.put ("java.lang.Exception", "error/error");
+	exceptionMappings.put ("java.lang.RuntimeException", "error/error");
+
+	exceptionResolver.setExceptionMappings (exceptionMappings);
+
+	Properties statusCodes = new Properties ();
+
+	statusCodes.put ("error/404", "404");
+	statusCodes.put ("error/error", "500");
+
+	exceptionResolver.setStatusCodes (statusCodes);
+
+	return exceptionResolver;
+    }
+
+
+    @Bean
+    public ViewResolver viewResolver ()
+    {
+	InternalResourceViewResolver viewResolver = new InternalResourceViewResolver ();
+
+	viewResolver.setViewClass (JstlView.class);
+	viewResolver.setPrefix (VIEW_RESOLVER_PREFIX);
+	viewResolver.setSuffix (VIEW_RESOLVER_SUFFIX);
+
+	return viewResolver;
     }
 }

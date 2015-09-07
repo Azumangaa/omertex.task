@@ -8,5 +8,5 @@ import com.omertex.task.customer.model.Customer;
 
 public interface CustomerRepository extends JpaRepository<Customer, Long>
 {
-	public List<Customer> findByName(String name);
+    public List<Customer> findByName (String name);
 }

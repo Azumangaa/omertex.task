@@ -14,32 +14,32 @@ import com.omertex.task.topic.model.Topic;
 import com.omertex.task.topic.service.RepositoryTopicService;
 
 @Controller
-public class TopicsController 
+public class TopicsController
 {
-	private RepositoryTopicService service;
-	
-	@Autowired
-	public TopicsController(RepositoryTopicService service) {
-		this.service = service;
-	}
-	
-	
-	@RequestMapping(value="/topics/{pageNumber}", method=RequestMethod.GET)
-	public String showTopics(
-			Model model,
-			@PathVariable("pageNumber") Integer pageNumber)
-	{
-		Page<Topic> page = service.getTopics(1);
-		List<Topic> content = page.getContent();
-		Integer current = page.getNumber() + 1; 
-		Integer begin = Math.max(1, current - 5); 
-		Integer end =  Math.min(begin + 10, page.getTotalPages());
-		
-		model.addAttribute("topicList", content);
-		model.addAttribute("currentPage", current);
-		model.addAttribute("beginPage", begin);
-		model.addAttribute("endPage", end);
-		
-		return "topics";
-	}
+    private RepositoryTopicService service;
+
+
+    @Autowired
+    public TopicsController (RepositoryTopicService service)
+    {
+	this.service = service;
+    }
+
+
+    @RequestMapping (value = "/topics/{pageNumber}", method = RequestMethod.GET)
+    public String showTopics (Model model, @PathVariable ("pageNumber") Integer pageNumber)
+    {
+	Page<Topic> page = service.getTopics (1);
+	List<Topic> content = page.getContent ();
+	Integer current = page.getNumber () + 1;
+	Integer begin = Math.max (1, current - 5);
+	Integer end = Math.min (begin + 10, page.getTotalPages ());
+
+	model.addAttribute ("topicList", content);
+	model.addAttribute ("currentPage", current);
+	model.addAttribute ("beginPage", begin);
+	model.addAttribute ("endPage", end);
+
+	return "topics";
+    }
 }

@@ -12,47 +12,46 @@ import com.omertex.task.topic.model.Topic;
 import com.omertex.task.topic.repository.TopicRepository;
 
 @Service
-public class RepositoryTopicService 
+public class RepositoryTopicService
 {
-	private TopicRepository repository;
-	private final Integer recordPerPage = 50;
-	
-	@Autowired
-	public RepositoryTopicService(TopicRepository repository)
+    private TopicRepository repository;
+    private final Integer recordPerPage = 50;
+
+
+    @Autowired
+    public RepositoryTopicService (TopicRepository repository)
+    {
+	this.repository = repository;
+    }
+
+
+    public Page<Topic> getTopics (Integer pageNumber)
+    {
+	PageRequest pageRequest = new PageRequest (pageNumber - 1, recordPerPage, Sort.Direction.DESC, "creationTime");
+	return repository.findAll (pageRequest);
+    }
+
+
+    public Topic addTopic (String topicName)
+    {
+	if (topicExists (topicName))
+	    return null;
+	else
 	{
-		this.repository = repository;
+	    Topic.Builder builder = new Topic.Builder ();
+	    Topic topic = builder.name (topicName).build ();
+	    return repository.save (topic);
 	}
-	
-	
-	public Page<Topic> getTopics( Integer pageNumber ) 
-	{
-		PageRequest pageRequest = new PageRequest(pageNumber - 1, 
-				recordPerPage, 
-				Sort.Direction.DESC, "creationTime" );
-		return repository.findAll(pageRequest);
-	}
-	
-	
-	public Topic addTopic(String topicName)
-	{
-		if ( topicExists(topicName) )
-			return null;
-		else
-		{
-			Topic.Builder builder = new Topic.Builder();
-			Topic topic = builder.name(topicName).build();
-			return repository.save(topic);
-		}
-	}
-	
-	
-	public boolean topicExists(String topicName)
-	{
-		List<Topic> topic = repository.findByName(topicName);
-		
-		if ( topic != null )
-			return true;
-		else
-			return false;
-	}
+    }
+
+
+    public boolean topicExists (String topicName)
+    {
+	List<Topic> topic = repository.findByName (topicName);
+
+	if (topic != null)
+	    return true;
+	else
+	    return false;
+    }
 }

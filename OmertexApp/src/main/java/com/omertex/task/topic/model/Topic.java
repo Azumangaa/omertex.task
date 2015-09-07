@@ -8,61 +8,61 @@ import javax.persistence.Id;
 import com.omertex.task.common.model.BaseEntity;
 
 @Entity
-public class Topic extends BaseEntity<Integer> 
+public class Topic extends BaseEntity<Long>
 {
-	@Id
-	@GeneratedValue
-	private Integer id;
-	
-	@Column(name="name")
-	private String name;
-	
-	
-	public Topic()
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    @Column (name = "name")
+    private String name;
+
+
+    public Topic ()
+    {
+
+    }
+
+
+    @Override
+    public Long getId ()
+    {
+	return id;
+    }
+
+
+    public String getName ()
+    {
+	return name;
+    }
+
+
+    public static Builder getBuilder ()
+    {
+	return new Builder ();
+    }
+
+    public static class Builder
+    {
+	private Topic topic;
+
+
+	public Builder ()
 	{
-		
+	    topic = new Topic ();
 	}
-	
-	
-	@Override
-	public Integer getId()
+
+
+	public Builder name (String name)
 	{
-		return id;
+	    this.topic.name = name;
+	    return this;
 	}
-	
-	public String getName()
+
+
+	public Topic build ()
 	{
-		return name;
+	    return topic;
 	}
-	
-	
-	public static Builder getBuilder()
-	{
-		return new Builder();
-	}
-	
-	
-	public static class Builder
-	{
-		private Topic topic;
-		
-		
-		public Builder()
-		{
-			topic = new Topic();
-		}
-		
-		
-		public Builder name(String name)
-		{
-			this.topic.name = name;
-			return this;
-		}
-		
-		
-		public Topic build()
-		{
-			return topic;
-		}
-	}
+    }
 }

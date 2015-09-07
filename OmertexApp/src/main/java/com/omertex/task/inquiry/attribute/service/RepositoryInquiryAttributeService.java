@@ -10,37 +10,37 @@ import com.omertex.task.inquiry.attribute.repository.InquiryAttributeRepository;
 import com.omertex.task.inquiry.model.Inquiry;
 
 @Service
-public class RepositoryInquiryAttributeService {
-	InquiryAttributeRepository repository;
-	
-	@Autowired
-	public RepositoryInquiryAttributeService(InquiryAttributeRepository repository) {
-		this.repository = repository;
-	}
-	
-	
-	public InquiryAttribute addInquiryAttribute(Inquiry inquiry, String name, String value)
+public class RepositoryInquiryAttributeService
+{
+    InquiryAttributeRepository repository;
+
+
+    @Autowired
+    public RepositoryInquiryAttributeService (InquiryAttributeRepository repository)
+    {
+	this.repository = repository;
+    }
+
+
+    public InquiryAttribute addInquiryAttribute (Inquiry inquiry, String name, String value)
+    {
+	InquiryAttribute attr = inquiryAttributeExists (inquiry, name);
+	if (attr == null)
 	{
-		if ( inquiryAttributeExists(inquiry, name) == false )
-		{
-			InquiryAttribute attr = InquiryAttribute.getBuilder()
-					.inquiry(inquiry)
-					.name(name)
-					.value(value)
-					.build();
-			return repository.save(attr);
-		}
-		else
-			return null;
+	    attr = InquiryAttribute.getBuilder ().inquiry (inquiry).name (name).value (value).build ();
+	    return repository.save (attr);
 	}
-	
-	
-	public boolean inquiryAttributeExists(Inquiry inquiry, String name)
-	{
-		List<InquiryAttribute> inquiryAttributes = repository.findByInquiryAndName(inquiry, name);
-		if (inquiryAttributes != null)
-			return true;
-		else
-			return false;
-	}
+	else
+	    return attr;
+    }
+
+
+    public InquiryAttribute inquiryAttributeExists (Inquiry inquiry, String name)
+    {
+	List<InquiryAttribute> inquiryAttributes = repository.findByInquiryAndName (inquiry, name);
+	if (inquiryAttributes != null)
+	    return inquiryAttributes.get (0);
+	else
+	    return null;
+    }
 }

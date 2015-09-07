@@ -12,38 +12,37 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.omertex.task.customer.dto.CustomerForm;
-import com.omertex.task.customer.model.Customer;
 import com.omertex.task.customer.service.RepositoryCustomerService;
 
 @Controller
-@SessionAttributes("customer")
-public class CustomerController 
+@SessionAttributes ("customer")
+public class CustomerController
 {
-	private RepositoryCustomerService service;
-	
-	@Autowired
-	public CustomerController (RepositoryCustomerService service) 
-	{
-		this.service = service; 
-	}
-	
-	
-	@RequestMapping(value="/customer/add", method=RequestMethod.GET)
-	public String showCustomerForm( Model model)
-	{
-		model.addAttribute("customer", new CustomerForm());
-		return "/customer/add";
-	}
-	
-	
-	@RequestMapping(value="/customer/add", method=RequestMethod.POST)
-	public String addNewCustomer(@Valid @ModelAttribute("customer") CustomerForm dto,
-			BindingResult result)
-	{
-		if (result.hasErrors())
-			return "/customer/add";
-		service.addCustomer(dto);
-		return "redirect:/customer/" + dto.getName() + "/newInquiry";
-	}
-	
+    private RepositoryCustomerService service;
+
+
+    @Autowired
+    public CustomerController (RepositoryCustomerService service)
+    {
+	this.service = service;
+    }
+
+
+    @RequestMapping (value = "/customer/add", method = RequestMethod.GET)
+    public String showCustomerForm (Model model)
+    {
+	model.addAttribute ("customer", new CustomerForm ());
+	return "/customer/add";
+    }
+
+
+    @RequestMapping (value = "/customer/add", method = RequestMethod.POST)
+    public String addNewCustomer (@Valid @ModelAttribute ("customer") CustomerForm dto, BindingResult result)
+    {
+	if (result.hasErrors ())
+	    return "/customer/add";
+	service.addCustomer (dto);
+	return "redirect:/customer/" + dto.getName () + "/newInquiry";
+    }
+
 }

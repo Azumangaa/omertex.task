@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.omertex.task.topic.model.Topic;
 
-public interface TopicRepository extends JpaRepository<Topic, Integer> 
+public interface TopicRepository extends JpaRepository<Topic, Long>
 {
-	List<Topic> findByName(String name);
+    List<Topic> findByName (String name);
 }
