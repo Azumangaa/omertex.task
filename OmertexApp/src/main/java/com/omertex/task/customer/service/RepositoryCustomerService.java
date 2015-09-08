@@ -36,7 +36,7 @@ public class RepositoryCustomerService
     }
 
 
-    private Customer customerExists (String name)
+    public Customer customerExists (String name)
     {
 	List<Customer> customer = repository.findByName (name);
 	if (customer != null && !customer.isEmpty ())

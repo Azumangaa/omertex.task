@@ -115,9 +115,46 @@ public class Inquiry extends BaseEntity<Long>
 	}
 
 
+	public Builder id (Long id)
+	{
+	    inquiry.id = id;
+	    return this;
+	}
+
+
 	public Inquiry build ()
 	{
 	    return inquiry;
 	}
+    }
+
+
+    public void setId (Long id)
+    {
+	this.id = id;
+    }
+
+
+    public void setDescription (String description)
+    {
+	this.description = description;
+    }
+
+
+    public void setCustomer (Customer customer)
+    {
+	this.customer = customer;
+    }
+
+
+    public void setInquiryAttributes (List<InquiryAttribute> inquiryAttributes)
+    {
+	this.inquiryAttributes = inquiryAttributes;
+    }
+
+
+    public void setTopic (Topic topic)
+    {
+	this.topic = topic;
     }
 }

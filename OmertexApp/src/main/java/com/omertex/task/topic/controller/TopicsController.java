@@ -26,7 +26,7 @@ public class TopicsController
     }
 
 
-    @RequestMapping (value = "/topics/{pageNumber}", method = RequestMethod.GET)
+    @RequestMapping (value = "/topics", method = RequestMethod.GET)
     public String showTopics (Model model, @PathVariable ("pageNumber") Integer pageNumber)
     {
 	Page<Topic> page = service.getTopics (1);

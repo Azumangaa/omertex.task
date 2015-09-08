@@ -22,6 +22,7 @@ public class InquiryForm
 	    FactoryUtils.instantiateFactory (InquiryAttribute.class));
     @NotNull
     private Long topicId;
+    private Long inquiryId = null;
 
 
     public String getDescription ()
@@ -87,5 +88,17 @@ public class InquiryForm
     public void setAttributes (List attributes)
     {
 	this.attributes = attributes;
+    }
+
+
+    public Long getId ()
+    {
+	return inquiryId;
+    }
+
+
+    public void setId (Long id)
+    {
+	this.inquiryId = id;
     }
 }

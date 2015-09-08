@@ -26,6 +26,12 @@ public class Customer extends BaseEntity<Long>
     private List<Inquiry> inquiries;
 
 
+    public List<Inquiry> getInquiries ()
+    {
+	return inquiries;
+    }
+
+
     @Override
     public Long getId ()
     {

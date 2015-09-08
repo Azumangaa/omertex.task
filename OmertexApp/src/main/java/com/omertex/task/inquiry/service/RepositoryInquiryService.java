@@ -37,12 +37,13 @@ public class RepositoryInquiryService
 
 
     @SuppressWarnings ("unchecked")
-    public Inquiry addInquiry (InquiryForm inquiryData)
+    public Inquiry addOrUpdateInquiry (InquiryForm inquiryData)
     {
 
 	Builder inquiryBuilder = Inquiry.getBuilder ();
 	Customer customer = customerRepository.findOne (inquiryData.getCustomerId ());
 	Topic topic = topicRepository.findOne (inquiryData.getTopic ());
+	inquiryBuilder.id (inquiryData.getId ());
 	Inquiry inquiry = inquiryRepository.save (inquiryBuilder.customer (customer)
 		.topic (topic)
 		.description (inquiryData.getDescription ()).build ());
@@ -56,6 +57,24 @@ public class RepositoryInquiryService
 	    }
 	}
 	return inquiry;
+    }
+
+
+    public Inquiry getInquiryById (Long inquiryId)
+    {
+	return inquiryRepository.findOne (inquiryId);
+    }
+
+
+    public Inquiry addInquiry (Inquiry inquiry) throws Exception
+    {
+	return inquiryRepository.save (inquiry);
+    }
+
+
+    public void deleteInquiry (Long inquiryId) throws Exception
+    {
+	inquiryRepository.delete (inquiryId);
     }
 
 }

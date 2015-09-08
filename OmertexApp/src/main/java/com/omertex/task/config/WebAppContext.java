@@ -1,41 +1,33 @@
 package com.omertex.task.config;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
+import org.springframework.web.accept.ContentNegotiationManager;
 import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
+import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
-import org.springframework.web.servlet.view.JstlView;
+import org.springframework.web.servlet.view.ContentNegotiatingViewResolver;
 
-import java.util.Properties;
+import com.omertex.task.config.viewresolver.JsonViewResolver;
 
 @Configuration
-@ComponentScan (basePackages = { "com.omertex.task.common.controller", "com.omertex.task.topic.controller",
-	"com.omertex.task.inquiry.controller", "com.omertex.task.customer.controller" })
+@ComponentScan (basePackages = { "com.omertex.task.topic.controller", "com.omertex.task.inquiry.controller",
+	"com.omertex.task.config.viewresolver" })
 @EnableWebMvc
 public class WebAppContext extends WebMvcConfigurerAdapter
 {
-
-    private static final String VIEW_RESOLVER_PREFIX = "/WEB-INF/jsp/";
-    private static final String VIEW_RESOLVER_SUFFIX = ".jsp";
-
-
     @Override
-    public void addResourceHandlers (ResourceHandlerRegistry registry)
+    public void configureContentNegotiation (ContentNegotiationConfigurer configurer)
     {
-	registry.addResourceHandler ("/static/**").addResourceLocations ("/static/");
-    }
-
-
-    @Override
-    public void configureDefaultServletHandling (DefaultServletHandlerConfigurer configurer)
-    {
-	configurer.enable ();
+	configurer.ignoreAcceptHeader (true).defaultContentType (MediaType.APPLICATION_JSON);
     }
 
 
@@ -63,13 +55,16 @@ public class WebAppContext extends WebMvcConfigurerAdapter
 
 
     @Bean
-    public ViewResolver viewResolver ()
+    public ViewResolver viewResolver (ContentNegotiationManager manager)
     {
-	InternalResourceViewResolver viewResolver = new InternalResourceViewResolver ();
+	ContentNegotiatingViewResolver viewResolver = new ContentNegotiatingViewResolver ();
+	viewResolver.setContentNegotiationManager (manager);
 
-	viewResolver.setViewClass (JstlView.class);
-	viewResolver.setPrefix (VIEW_RESOLVER_PREFIX);
-	viewResolver.setSuffix (VIEW_RESOLVER_SUFFIX);
+	List<ViewResolver> resolvers = new ArrayList<ViewResolver> ();
+	resolvers.add (new JsonViewResolver ());
+
+	viewResolver.setViewResolvers (resolvers);
+
 
 	return viewResolver;
     }
