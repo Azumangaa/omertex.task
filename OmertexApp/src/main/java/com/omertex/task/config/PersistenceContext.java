@@ -17,15 +17,12 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import com.jolbox.bonecp.BoneCPDataSource;
 
 @Configuration
-@EnableJpaRepositories (basePackages = { "com.omertex.task.topic.repository", "com.omertex.task.inquiry.repository",
-	"com.omertex.task.inquiry.attribute.repository" })
+@EnableJpaRepositories (basePackages = { "com.omertex.task.repository" })
 @EnableTransactionManagement
 public class PersistenceContext
 {
 
-    private static final String[] PROPERTY_PACKAGES_TO_SCAN = { "com.omertex.task.common.model",
-	    "com.omertex.task.topic.model", "com.omertex.task.inquiry.model",
-	    "com.omertex.task.inquiry.attribute.model" };
+    private static final String[] PROPERTY_PACKAGES_TO_SCAN = { "com.omertex.task.model" };
 
     protected static final String PROPERTY_NAME_DATABASE_DRIVER = "db.driver";
     protected static final String PROPERTY_NAME_DATABASE_PASSWORD = "db.password";

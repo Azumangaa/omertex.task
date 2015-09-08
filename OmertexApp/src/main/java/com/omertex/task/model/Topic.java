@@ -1,11 +1,9 @@
-package com.omertex.task.topic.model;
+package com.omertex.task.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-
-import com.omertex.task.common.model.BaseEntity;
 
 @Entity
 public class Topic extends BaseEntity<Long>

@@ -1,4 +1,4 @@
-package com.omertex.task.inquiry.controller;
+package com.omertex.task.controller;
 
 import java.util.List;
 
@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.WebRequest;
 
-import com.omertex.task.inquiry.model.Inquiry;
-import com.omertex.task.inquiry.service.RepositoryInquiryService;
+import com.omertex.task.model.Inquiry;
+import com.omertex.task.service.RepositoryInquiryService;
 
 
 @Controller

@@ -1,10 +1,10 @@
-package com.omertex.task.inquiry.repository;
+package com.omertex.task.repository;
 
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.omertex.task.inquiry.model.Inquiry;
+import com.omertex.task.model.Inquiry;
 
 public interface InquiryRepository extends JpaRepository<Inquiry, Long>
 {

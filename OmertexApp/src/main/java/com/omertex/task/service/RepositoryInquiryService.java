@@ -1,4 +1,4 @@
-package com.omertex.task.inquiry.service;
+package com.omertex.task.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,10 +6,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.omertex.task.inquiry.attribute.model.InquiryAttribute;
-import com.omertex.task.inquiry.attribute.service.RepositoryInquiryAttributeService;
-import com.omertex.task.inquiry.model.Inquiry;
-import com.omertex.task.inquiry.repository.InquiryRepository;
+import com.omertex.task.model.Inquiry;
+import com.omertex.task.model.InquiryAttribute;
+import com.omertex.task.repository.InquiryRepository;
 
 @Service
 public class RepositoryInquiryService

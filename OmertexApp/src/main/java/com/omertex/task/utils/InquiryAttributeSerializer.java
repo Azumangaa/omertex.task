@@ -1,4 +1,4 @@
-package com.omertex.task.serializers;
+package com.omertex.task.utils;
 
 import java.io.IOException;
 
@@ -6,7 +6,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
-import com.omertex.task.inquiry.attribute.model.InquiryAttribute;
+import com.omertex.task.model.InquiryAttribute;
 
 public class InquiryAttributeSerializer extends JsonSerializer<InquiryAttribute>
 {

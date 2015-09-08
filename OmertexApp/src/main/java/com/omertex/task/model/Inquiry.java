@@ -1,4 +1,4 @@
-package com.omertex.task.inquiry.model;
+package com.omertex.task.model;
 
 import java.util.List;
 
@@ -12,10 +12,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.omertex.task.common.model.BaseEntity;
-import com.omertex.task.deserializers.InquiryDeserializer;
-import com.omertex.task.inquiry.attribute.model.InquiryAttribute;
-import com.omertex.task.topic.model.Topic;
+import com.omertex.task.utils.InquiryDeserializer;
 
 @Entity
 @JsonDeserialize (using = InquiryDeserializer.class)

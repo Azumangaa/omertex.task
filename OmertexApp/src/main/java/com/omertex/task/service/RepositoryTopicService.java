@@ -1,10 +1,10 @@
-package com.omertex.task.topic.service;
+package com.omertex.task.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.omertex.task.topic.model.Topic;
-import com.omertex.task.topic.repository.TopicRepository;
+import com.omertex.task.model.Topic;
+import com.omertex.task.repository.TopicRepository;
 
 @Service
 public class RepositoryTopicService

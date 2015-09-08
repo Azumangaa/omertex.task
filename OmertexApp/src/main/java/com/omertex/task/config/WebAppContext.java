@@ -16,11 +16,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 import org.springframework.web.servlet.view.ContentNegotiatingViewResolver;
 
-import com.omertex.task.config.viewresolver.JsonViewResolver;
+import com.omertex.task.utils.JsonViewResolver;
 
 @Configuration
-@ComponentScan (basePackages = { "com.omertex.task.topic.controller", "com.omertex.task.inquiry.controller",
-	"com.omertex.task.config.viewresolver" })
+@ComponentScan (basePackages = { "com.omertex.task.controller", "com.omertex.task.utils" })
 @EnableWebMvc
 public class WebAppContext extends WebMvcConfigurerAdapter
 {

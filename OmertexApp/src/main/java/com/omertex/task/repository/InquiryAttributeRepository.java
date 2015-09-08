@@ -1,12 +1,12 @@
-package com.omertex.task.inquiry.attribute.repository;
+package com.omertex.task.repository;
 
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.omertex.task.inquiry.attribute.model.InquiryAttribute;
-import com.omertex.task.inquiry.model.Inquiry;
+import com.omertex.task.model.Inquiry;
+import com.omertex.task.model.InquiryAttribute;
 
 public interface InquiryAttributeRepository extends JpaRepository<InquiryAttribute, Long>
 {

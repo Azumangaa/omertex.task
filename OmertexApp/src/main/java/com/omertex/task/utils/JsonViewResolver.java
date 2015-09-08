@@ -1,4 +1,4 @@
-package com.omertex.task.config.viewresolver;
+package com.omertex.task.utils;
 
 import java.util.Locale;
 

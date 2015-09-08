@@ -1,4 +1,4 @@
-package com.omertex.task.deserializers;
+package com.omertex.task.utils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,10 +13,10 @@ import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.omertex.task.inquiry.attribute.model.InquiryAttribute;
-import com.omertex.task.inquiry.model.Inquiry;
-import com.omertex.task.topic.model.Topic;
-import com.omertex.task.topic.service.RepositoryTopicService;
+import com.omertex.task.model.Inquiry;
+import com.omertex.task.model.InquiryAttribute;
+import com.omertex.task.model.Topic;
+import com.omertex.task.service.RepositoryTopicService;
 
 public class InquiryDeserializer extends JsonDeserializer<Inquiry>
 {

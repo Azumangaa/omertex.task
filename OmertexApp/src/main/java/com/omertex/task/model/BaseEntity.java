@@ -1,4 +1,4 @@
-package com.omertex.task.common.model;
+package com.omertex.task.model;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
@@ -10,7 +10,7 @@ import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.omertex.task.serializers.DateTimeSerializer;
+import com.omertex.task.utils.DateTimeSerializer;
 
 @MappedSuperclass
 public abstract class BaseEntity<ID>

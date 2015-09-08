@@ -1,4 +1,4 @@
-package com.omertex.task.serializers;
+package com.omertex.task.utils;
 
 import java.io.IOException;
 

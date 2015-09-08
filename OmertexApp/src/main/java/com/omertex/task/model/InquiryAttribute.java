@@ -1,4 +1,4 @@
-package com.omertex.task.inquiry.attribute.model;
+package com.omertex.task.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,10 +10,8 @@ import javax.persistence.ManyToOne;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.omertex.task.common.model.BaseEntity;
-import com.omertex.task.inquiry.model.Inquiry;
-import com.omertex.task.inquiry.repository.InquiryRepository;
-import com.omertex.task.serializers.InquiryAttributeSerializer;
+import com.omertex.task.repository.InquiryRepository;
+import com.omertex.task.utils.InquiryAttributeSerializer;
 
 @Entity
 @JsonSerialize (using = InquiryAttributeSerializer.class)
