@@ -7,10 +7,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.omertex.task.common.model.BaseEntity;
 import com.omertex.task.inquiry.model.Inquiry;
+import com.omertex.task.serializers.InquiryAttributeSerializer;
 
 @Entity
+@JsonSerialize (using = InquiryAttributeSerializer.class)
 public class InquiryAttribute extends BaseEntity<Long>
 {
     @Id

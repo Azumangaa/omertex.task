@@ -25,7 +25,7 @@ public class PersistenceContext
 
     private static final String[] PROPERTY_PACKAGES_TO_SCAN = { "com.omertex.task.common.model",
 	    "com.omertex.task.topic.model", "com.omertex.task.inquiry.model",
-	    "com.omertex.task.inquiry.attribute.model", "com.omertex.task.customer.model" };
+	    "com.omertex.task.inquiry.attribute.model" };
 
     protected static final String PROPERTY_NAME_DATABASE_DRIVER = "db.driver";
     protected static final String PROPERTY_NAME_DATABASE_PASSWORD = "db.password";

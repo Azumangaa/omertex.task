@@ -22,10 +22,10 @@ public class Inquiry extends BaseEntity<Long>
     @GeneratedValue
     private Long id;
 
-    @Column (name = "description")
+    @Column (name = "description", nullable = false)
     private String description;
 
-    @Column (name = "customer")
+    @Column (name = "customer", nullable = false)
     private String customer;
 
     @OneToMany (mappedBy = "inquiry", targetEntity = InquiryAttribute.class, cascade = CascadeType.ALL,

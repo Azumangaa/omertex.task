@@ -9,7 +9,4 @@ import com.omertex.task.inquiry.model.Inquiry;
 public interface InquiryRepository extends JpaRepository<Inquiry, Long>
 {
     public List<Inquiry> findByCustomer (String customer);
-
-
-    public List<Inquiry> findByIdByCustomer (Long id, String customer);
 }

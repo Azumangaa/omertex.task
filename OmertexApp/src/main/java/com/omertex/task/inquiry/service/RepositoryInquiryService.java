@@ -51,9 +51,12 @@ public class RepositoryInquiryService
 
     public Inquiry getInquiryByIdCustomerName (Long inquiryId, String customerName)
     {
-	List<Inquiry> inquiries = inquiryRepository.findByIdByCustomer (inquiryId, customerName);
-	if (!inquiries.isEmpty ())
-	    return inquiries.get (0);
+	Inquiry inquiry = inquiryRepository.findOne (inquiryId);
+	if (inquiry != null)
+	{
+	if (inquiry.getCustomer ().equals (customerName))
+	    return inquiry;
+	}
 	return null;
     }
 }
