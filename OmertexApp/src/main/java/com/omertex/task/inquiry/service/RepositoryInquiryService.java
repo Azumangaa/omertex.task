@@ -1,5 +1,6 @@
 package com.omertex.task.inquiry.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,5 +73,20 @@ public class RepositoryInquiryService
 	    return inquiry;
 	}
 	return null;
+    }
+
+
+    public Inquiry updateInquiry (Inquiry inquiry)
+    {
+	inquiryAttributeRepository.deleteWhereInquiry (inquiry);
+	List<InquiryAttribute> newAttributeList = new ArrayList<InquiryAttribute> (0);
+	for (InquiryAttribute attribute : inquiry.getInquiryAttributes ())
+	{
+	    attribute.setInquiry (inquiry);
+	    newAttributeList.add (inquiryAttributeRepository.add (attribute));
+	}
+	inquiryRepository.save (inquiry);
+	inquiry.setInquiryAttributes (newAttributeList);
+	return inquiry;
     }
 }

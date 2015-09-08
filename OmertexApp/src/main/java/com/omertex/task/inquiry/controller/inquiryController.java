@@ -36,13 +36,15 @@ public class inquiryController
 
 
     @RequestMapping (value = "/customers/{customerName}/inquiries", method = RequestMethod.GET)
-    public void getCustomerInquiries (@PathVariable ("customerName") String customerName, Model model)
+    public void getCustomerInquiries (@PathVariable ("customerName") String customerName, Model model
+	    )
     {
 	List<Inquiry> inquiries = inquiryService.getCustomerInquiries (customerName);
 
 	if (inquiries != null)
 	{
 	    model.addAttribute ("InquiryList", inquiries);
+	    
 	}
 	else
 	{
@@ -93,6 +95,7 @@ public class inquiryController
 	httpResponse.setStatus (HttpStatus.CREATED.value ());
 	httpResponse.setHeader ("Location",
 		request.getContextPath () + "/task/customers/" + customerName + "/inquiries/" + newInquiry.getId ());
+	httpResponse.setCharacterEncoding ("application/json; UTF-8");
 
 	model.addAttribute (DATA_FIELD, newInquiry);
     }
@@ -112,10 +115,12 @@ public class inquiryController
 	}
 
 	Inquiry inquiry = null;
-	updatedInquiry.setId (inquiryId);
+	inquiryToUpdate.setDescription (updatedInquiry.getDescription ());
+	inquiryToUpdate.setTopic (updatedInquiry.getTopic ());
+	inquiryToUpdate.setInquiryAttributes (updatedInquiry.getInquiryAttributes ());
 	try
 	{
-	    inquiry = inquiryService.addInquiry (updatedInquiry);
+	    inquiry = inquiryService.updateInquiry (inquiryToUpdate);
 	}
 	catch (Exception e)
 	{

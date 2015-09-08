@@ -59,4 +59,12 @@ public class RepositoryInquiryAttributeService
 	    return repository.saveAndFlush (inquiryAttribute);
 	return null;
     }
+
+
+    public Long deleteWhereInquiry (Inquiry inquiry)
+    {
+	if (inquiry != null)
+	    return repository.deleteByInquiry (inquiry);
+	return null;
+    }
 }
