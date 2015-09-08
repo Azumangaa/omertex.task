@@ -1,0 +1,16 @@
+{
+    "description":"ttt asdsad as das fasd fdsвыфа выа выф аывф",
+        "customer":"cross",
+        "topic":{
+            "id": 1
+        },
+     "inquiryAttributes":{
+      "0":{
+         "name":"tes2t",
+         "value":"tes2t"},
+        "1":{
+         "name":"te1st",
+         "value":"te1st"}
+     }
+    
+}

@@ -60,6 +60,12 @@ public class Topic extends BaseEntity<Long>
 	}
 
 
+	public Builder id (Long id)
+	{
+	    this.topic.id = id;
+	    return this;
+	}
+
 	public Topic build ()
 	{
 	    return topic;

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -69,6 +70,7 @@ public class inquiryController
     }
 
 
+    @CrossOrigin
     @RequestMapping (value = "/customers/{customerName}/inquiries", method = RequestMethod.POST)
     public void addCustomerInquiries (@RequestBody Inquiry inquiry,
 	    @PathVariable ("customerName") String customerName, HttpServletResponse httpResponse,
@@ -90,7 +92,7 @@ public class inquiryController
 
 	httpResponse.setStatus (HttpStatus.CREATED.value ());
 	httpResponse.setHeader ("Location",
-		request.getContextPath () + "/task/customers/" + customerName + "/inquiries" + newInquiry.getId ());
+		request.getContextPath () + "/task/customers/" + customerName + "/inquiries/" + newInquiry.getId ());
 
 	model.addAttribute (DATA_FIELD, newInquiry);
     }

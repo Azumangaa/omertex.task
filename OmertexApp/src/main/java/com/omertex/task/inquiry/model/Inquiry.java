@@ -11,11 +11,14 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.omertex.task.common.model.BaseEntity;
+import com.omertex.task.deserializers.InquiryDeserializer;
 import com.omertex.task.inquiry.attribute.model.InquiryAttribute;
 import com.omertex.task.topic.model.Topic;
 
 @Entity
+@JsonDeserialize (using = InquiryDeserializer.class)
 public class Inquiry extends BaseEntity<Long>
 {
     @Id
@@ -94,6 +97,14 @@ public class Inquiry extends BaseEntity<Long>
     public void setTopic (Topic topic)
     {
 	this.topic = topic;
+    }
+
+
+    @Override
+    public String toString ()
+    {
+	return "Inquiry [id=" + id + ", description=" + description + ", customer=" + customer + ", inquiryAttributes="
+		+ inquiryAttributes + ", topic=" + topic + "]";
     }
 
 

@@ -43,4 +43,20 @@ public class RepositoryInquiryAttributeService
 	else
 	    return null;
     }
+
+
+    public List<InquiryAttribute> addMany (List<InquiryAttribute> attributes)
+    {
+	if (attributes != null)
+	    return repository.save (attributes);
+	return null;
+    }
+
+
+    public InquiryAttribute add (InquiryAttribute inquiryAttribute)
+    {
+	if (inquiryAttribute != null)
+	    return repository.saveAndFlush (inquiryAttribute);
+	return null;
+    }
 }

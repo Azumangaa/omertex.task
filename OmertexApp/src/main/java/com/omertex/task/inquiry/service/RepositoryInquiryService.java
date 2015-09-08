@@ -5,22 +5,24 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.omertex.task.inquiry.attribute.repository.InquiryAttributeRepository;
+import com.omertex.task.inquiry.attribute.model.InquiryAttribute;
+import com.omertex.task.inquiry.attribute.service.RepositoryInquiryAttributeService;
 import com.omertex.task.inquiry.model.Inquiry;
 import com.omertex.task.inquiry.repository.InquiryRepository;
-import com.omertex.task.topic.repository.TopicRepository;
 
 @Service
 public class RepositoryInquiryService
 {
     private InquiryRepository inquiryRepository;
+    private RepositoryInquiryAttributeService inquiryAttributeRepository;
 
 
     @Autowired
     public RepositoryInquiryService (InquiryRepository repository,
-	    TopicRepository topicRepository, InquiryAttributeRepository inquiryAttributeRepository)
+	    RepositoryInquiryAttributeService inquiryAttributeRepository)
     {
 	this.inquiryRepository = repository;
+	this.inquiryAttributeRepository = inquiryAttributeRepository;
     }
 
 
@@ -32,7 +34,19 @@ public class RepositoryInquiryService
 
     public Inquiry addInquiry (Inquiry inquiry) throws Exception
     {
-	return inquiryRepository.save (inquiry);
+	List<InquiryAttribute> attributes = inquiry.getInquiryAttributes ();
+	inquiry.setInquiryAttributes (null);
+	inquiry = inquiryRepository.saveAndFlush (inquiry);
+	if (attributes != null)
+	{
+	    for (InquiryAttribute inquiryAttribute : attributes)
+	    {
+		inquiryAttribute.setInquiry (inquiry);
+		inquiryAttributeRepository.add (inquiryAttribute);
+	    }
+	}
+	inquiry.setInquiryAttributes (attributes);
+	return inquiry;
     }
 
 

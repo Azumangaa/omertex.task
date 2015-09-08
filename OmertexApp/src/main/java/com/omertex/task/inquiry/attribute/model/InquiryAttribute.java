@@ -7,15 +7,25 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.omertex.task.common.model.BaseEntity;
 import com.omertex.task.inquiry.model.Inquiry;
+import com.omertex.task.inquiry.repository.InquiryRepository;
 import com.omertex.task.serializers.InquiryAttributeSerializer;
 
 @Entity
 @JsonSerialize (using = InquiryAttributeSerializer.class)
 public class InquiryAttribute extends BaseEntity<Long>
 {
+    @Override
+    public String toString ()
+    {
+	Long id = (inquiry != null) ? inquiry.getId () : null;
+	return "InquiryAttribute [id=" + id + ", name=" + name + ", value=" + value + ", inquiry=" + id + "]";
+    }
+
     @Id
     @GeneratedValue
     private Long id;
@@ -27,7 +37,7 @@ public class InquiryAttribute extends BaseEntity<Long>
     private String value;
 
     @ManyToOne (optional = false)
-    @JoinColumn (name = "inquiry_id", nullable = false)
+    @JoinColumn (name = "inquiry_id", insertable = true, referencedColumnName = "id")
     private Inquiry inquiry;
 
 
@@ -87,6 +97,14 @@ public class InquiryAttribute extends BaseEntity<Long>
     public static class Builder
     {
 	private InquiryAttribute inquiryAttribute;
+	private InquiryRepository inquiryRepository;
+
+
+	@Autowired
+	public void setInquiryRepository (InquiryRepository inquiryRepository)
+	{
+	    this.inquiryRepository = inquiryRepository;
+	}
 
 
 	public Builder ()
@@ -112,6 +130,14 @@ public class InquiryAttribute extends BaseEntity<Long>
 	public Builder inquiry (Inquiry inquiry)
 	{
 	    inquiryAttribute.inquiry = inquiry;
+	    return this;
+	}
+
+
+	public Builder inquiryById (Long id)
+	{
+	    if (id != null)
+		inquiryAttribute.inquiry = inquiryRepository.findOne (id);
 	    return this;
 	}
 
