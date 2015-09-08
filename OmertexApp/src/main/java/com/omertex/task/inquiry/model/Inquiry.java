@@ -8,13 +8,10 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import com.omertex.task.common.model.BaseEntity;
-import com.omertex.task.customer.model.Customer;
 import com.omertex.task.inquiry.attribute.model.InquiryAttribute;
 import com.omertex.task.topic.model.Topic;
 
@@ -28,9 +25,8 @@ public class Inquiry extends BaseEntity<Long>
     @Column (name = "description")
     private String description;
 
-    @ManyToOne (optional = false)
-    @JoinColumn (name = "customer_id", nullable = false)
-    private Customer customer;
+    @Column (name = "customer")
+    private String customer;
 
     @OneToMany (mappedBy = "inquiry", targetEntity = InquiryAttribute.class, cascade = CascadeType.ALL,
 	    fetch = FetchType.EAGER)
@@ -53,7 +49,7 @@ public class Inquiry extends BaseEntity<Long>
     }
 
 
-    public Customer getCustomer ()
+    public String getCustomer ()
     {
 	return customer;
     }
@@ -68,6 +64,36 @@ public class Inquiry extends BaseEntity<Long>
     public Topic getTopic ()
     {
 	return topic;
+    }
+
+
+    public void setId (Long id)
+    {
+	this.id = id;
+    }
+
+
+    public void setDescription (String description)
+    {
+	this.description = description;
+    }
+
+
+    public void setCustomer (String customer)
+    {
+	this.customer = customer;
+    }
+
+
+    public void setInquiryAttributes (List<InquiryAttribute> inquiryAttributes)
+    {
+	this.inquiryAttributes = inquiryAttributes;
+    }
+
+
+    public void setTopic (Topic topic)
+    {
+	this.topic = topic;
     }
 
 
@@ -94,7 +120,7 @@ public class Inquiry extends BaseEntity<Long>
 	}
 
 
-	public Builder customer (Customer customer)
+	public Builder customer (String customer)
 	{
 	    inquiry.customer = customer;
 	    return this;
@@ -126,35 +152,5 @@ public class Inquiry extends BaseEntity<Long>
 	{
 	    return inquiry;
 	}
-    }
-
-
-    public void setId (Long id)
-    {
-	this.id = id;
-    }
-
-
-    public void setDescription (String description)
-    {
-	this.description = description;
-    }
-
-
-    public void setCustomer (Customer customer)
-    {
-	this.customer = customer;
-    }
-
-
-    public void setInquiryAttributes (List<InquiryAttribute> inquiryAttributes)
-    {
-	this.inquiryAttributes = inquiryAttributes;
-    }
-
-
-    public void setTopic (Topic topic)
-    {
-	this.topic = topic;
     }
 }

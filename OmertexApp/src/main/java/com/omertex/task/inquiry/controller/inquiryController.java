@@ -1,5 +1,7 @@
 package com.omertex.task.inquiry.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,15 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.WebRequest;
 
-import com.omertex.task.customer.model.Customer;
-import com.omertex.task.customer.service.RepositoryCustomerService;
 import com.omertex.task.inquiry.model.Inquiry;
 import com.omertex.task.inquiry.service.RepositoryInquiryService;
+
 
 @Controller
 public class inquiryController
 {
-    private RepositoryCustomerService customerService;
     private RepositoryInquiryService inquiryService;
 
     private static final String DATA_FIELD = "data";
@@ -28,11 +28,8 @@ public class inquiryController
 
 
     @Autowired
-    public inquiryController (RepositoryCustomerService customerService,
-	    RepositoryInquiryService inquiryService)
+    public inquiryController (RepositoryInquiryService inquiryService)
     {
-	// this.jsonView = jsonView;
-	this.customerService = customerService;
 	this.inquiryService = inquiryService;
     }
 
@@ -40,10 +37,11 @@ public class inquiryController
     @RequestMapping (value = "/customers/{customerName}/inquiries", method = RequestMethod.GET)
     public void getCustomerInquiries (@PathVariable ("customerName") String customerName, Model model)
     {
-	Customer customer = customerService.customerExists (customerName);
-	if (customer != null)
+	List<Inquiry> inquiries = inquiryService.getCustomerInquiries (customerName);
+
+	if (inquiries != null)
 	{
-	    model.addAttribute ("InquiryList", customer.getInquiries ());
+	    model.addAttribute ("InquiryList", inquiries);
 	}
 	else
 	{
@@ -58,18 +56,11 @@ public class inquiryController
     public void getCustomerInquirie (@PathVariable ("customerName") String customerName,
 	    @PathVariable ("inquiryId") Long inquiryId, Model model)
     {
-	Customer customer = customerService.customerExists (customerName);
-	Inquiry inquiry = inquiryService.getInquiryById (inquiryId);
-	if (customer == null)
+	Inquiry inquiry = inquiryService.getInquiryByIdCustomerName (inquiryId, customerName);
+	if (inquiry == null)
 	{
 	    model.addAttribute (ERROR_FIELD, "Error while processing request GET:/customer/" + customerName + "/inquiries/"
-		    + inquiryId + ": No such customer");
-
-	}
-	else if (inquiry == null)
-	{
-	    model.addAttribute (ERROR_FIELD, "Error while processing request GET:/customer/" + customerName + "/inquiries/"
-		    + inquiryId + ": No such inquiry");
+ + inquiryId + ": No such inquiry, or wrong customer variable");
 	}
 	else
 	{
@@ -78,21 +69,15 @@ public class inquiryController
     }
 
 
-    @RequestMapping (value = "/customrs/{customerName}/inquiries", method = RequestMethod.POST)
+    @RequestMapping (value = "/customers/{customerName}/inquiries", method = RequestMethod.POST)
     public void addCustomerInquiries (@RequestBody Inquiry inquiry,
 	    @PathVariable ("customerName") String customerName, HttpServletResponse httpResponse,
  WebRequest request,
 	    Model model)
     {
-	Customer customer = customerService.customerExists (customerName);
-	if (customer == null)
-	{
-	    model.addAttribute (ERROR_FIELD,
-		    "Error while processing request POST:/customer/" + customerName + "/inquiries: No such customer");
-	}
 
 	Inquiry newInquiry = null;
-	inquiry.setCustomer (customer);
+	inquiry.setCustomer (customerName);
 	try
 	{
 	    newInquiry = inquiryService.addInquiry (inquiry);
@@ -111,23 +96,17 @@ public class inquiryController
     }
 
 
-    @RequestMapping (value = "/customrs/{customerName}/inquiries/{inquiryId}", method = RequestMethod.PUT)
+    @RequestMapping (value = "/customers/{customerName}/inquiries/{inquiryId}", method = RequestMethod.PUT)
     public void updateCustomerInquirie (@RequestBody Inquiry updatedInquiry,
 	    @PathVariable ("customerName") String customerName, @PathVariable ("inquiryId") Long inquiryId,
 	    HttpServletResponse httpResponse, Model model)
     {
-	Customer customer = customerService.customerExists (customerName);
-	if (customer == null)
-	{
-	    model.addAttribute (ERROR_FIELD,
-		    "Error while processing request PUT:/customer/" + customerName + "/inquiries: No such customer");
-	}
-	Inquiry inquiryToUpdate = inquiryService.getInquiryById (inquiryId);
+	Inquiry inquiryToUpdate = inquiryService.getInquiryByIdCustomerName (inquiryId, customerName);
 	if (inquiryToUpdate == null)
 	{
 	    model.addAttribute (ERROR_FIELD, "Error while processing request PUT:/customer/" + customerName
 		    + "/inquiries/"
-		    + inquiryId + ": No such inquiry");
+ + inquiryId + ": No such inquiry, or wrong customer variable");
 	}
 
 	Inquiry inquiry = null;
@@ -148,21 +127,15 @@ public class inquiryController
     }
 
 
-    @RequestMapping (value = "/customrs/{customerName}/inquiries/{inquiryId}", method = RequestMethod.DELETE)
+    @RequestMapping (value = "/customers/{customerName}/inquiries/{inquiryId}", method = RequestMethod.DELETE)
     public void deleteCustomerInquirie (@PathVariable ("customerName") String customerName,
 	    @PathVariable ("inquiryId") Long inquiryId, HttpServletResponse httpResponse, Model model)
     {
-	Customer customer = customerService.customerExists (customerName);
-	if (customer == null)
-	{
-	    model.addAttribute (ERROR_FIELD,
-		    "Error while processing request DELETE:/customer/" + customerName + "/inquiries: No such customer");
-	}
-	Inquiry inquiryToUpdate = inquiryService.getInquiryById (inquiryId);
+	Inquiry inquiryToUpdate = inquiryService.getInquiryByIdCustomerName (inquiryId, customerName);
 	if (inquiryToUpdate == null)
 	{
 	    model.addAttribute (ERROR_FIELD, "Error while processing request DELETE:/customer/" + customerName
-		    + "/inquiries/" + inquiryId + ": No such inquiry");
+		    + "/inquiries/" + inquiryId + ": No such inquiry, or wrong customer variable");
 	}
 
 	try

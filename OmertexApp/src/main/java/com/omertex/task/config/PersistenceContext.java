@@ -18,7 +18,7 @@ import com.jolbox.bonecp.BoneCPDataSource;
 
 @Configuration
 @EnableJpaRepositories (basePackages = { "com.omertex.task.topic.repository", "com.omertex.task.inquiry.repository",
-	"com.omertex.task.customer.repository", "com.omertex.task.inquiry.attribute.repository" })
+	"com.omertex.task.inquiry.attribute.repository" })
 @EnableTransactionManagement
 public class PersistenceContext
 {
