@@ -18,9 +18,14 @@ public class DateTimeSerializer extends JsonSerializer<DateTime>
     public void serialize (DateTime value, JsonGenerator jgen, SerializerProvider sprovider)
 	    throws IOException, JsonProcessingException
     {
-	DateTimeFormatter formatter = DateTimeFormat.forPattern ("yyyy-MM-dd HH:mm:ss");
-	String formattedDate = formatter.print (value);
-	jgen.writeString (formattedDate);
+	if(value != null)
+	{
+        	DateTimeFormatter formatter = DateTimeFormat.forPattern ("yyyy-MM-dd HH:mm:ss");
+        	String formattedDate = formatter.print (value);
+        	jgen.writeString (formattedDate);
+	}
+	else
+		jgen.writeString("null");
     }
 
 }

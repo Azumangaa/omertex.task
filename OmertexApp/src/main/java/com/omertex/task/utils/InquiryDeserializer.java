@@ -37,20 +37,41 @@ public class InquiryDeserializer extends JsonDeserializer<Inquiry>
 	ObjectCodec oc = jsonParser.getCodec();
         JsonNode node = oc.readTree(jsonParser);
 	Long id = null;
+	String description = null;
+	String customer = null;
         if ( node.get ("id") != null)
 	    id = node.get ("id").asLong ();
-        String description = node.get ("description").asText ();
-        String customer = node.get ("customer").asText ();
+
+	if (node.get ("description") != null)
+	    description = node.get ("description").asText ();
+
+	if (node.get ("customer") != null)
+	    customer = node.get ("customer").asText ();
+
 	List<InquiryAttribute> inquiryAttributes = new ArrayList<InquiryAttribute> (0);
+
 	if (node.get ("inquiryAttributes") != null)
 	{
 	    Iterator<JsonNode> attributes = node.get ("inquiryAttributes").elements ();
 	    while (attributes.hasNext ())
 	    {
 		JsonNode attr = attributes.next ();
-		inquiryAttributes.add (InquiryAttribute.getBuilder ().name (attr.get ("name").asText ())
-			.value (attr.get ("value").asText ()).build ());
+		String attrName = null;
+		String attrValue = null;
+		if (attr.get ("name") != null)
+		    attrName = attr.get ("name").asText ();
+
+		if (attr.get ("value") != null)
+		    attrValue = attr.get ("value").asText ();
+		inquiryAttributes.add (InquiryAttribute.getBuilder ().name (attrName).value (attrValue).build ());
 	    }
+	}
+	if (node.get ("topic") != null)
+	{
+	    Topic topic = null;
+	    Long topicId;
+	    if (node.get ("topic").get ("id") != null)
+		topicId = node.get ("topic").get ("id").asLong ();
 	}
 	Topic topic = topicService.getTopic (node.get ("topic").get ("id").asLong ());
 

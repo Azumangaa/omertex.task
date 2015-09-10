@@ -4,7 +4,6 @@ import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
-import javax.persistence.Version;
 
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
@@ -25,9 +24,6 @@ public abstract class BaseEntity<ID>
     @JsonSerialize (using = DateTimeSerializer.class)
     private DateTime modificationTime;
 
-    @Version
-    private Long version;
-
 
     public abstract ID getId ();
 
@@ -41,12 +37,6 @@ public abstract class BaseEntity<ID>
     public DateTime getModificationTime ()
     {
 	return modificationTime;
-    }
-
-
-    public long getVersion ()
-    {
-	return version;
     }
 
 

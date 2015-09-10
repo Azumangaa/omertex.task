@@ -6,21 +6,22 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 
 import com.omertex.task.model.Inquiry;
 import com.omertex.task.service.RepositoryInquiryService;
 
 
-@Controller
-public class inquiryController
+@RestController
+public class InquiryController
 {
     private RepositoryInquiryService inquiryService;
 
@@ -29,52 +30,53 @@ public class inquiryController
 
 
     @Autowired
-    public inquiryController (RepositoryInquiryService inquiryService)
+    public InquiryController (RepositoryInquiryService inquiryService)
     {
 	this.inquiryService = inquiryService;
     }
 
 
     @RequestMapping (value = "/customers/{customerName}/inquiries", method = RequestMethod.GET)
-    public void getCustomerInquiries (@PathVariable ("customerName") String customerName, Model model
+    @ResponseBody
+    public List<Inquiry> getCustomerInquiries (@PathVariable ("customerName") String customerName, Model model,
+	    HttpServletResponse httpResponse
 	    )
     {
 	List<Inquiry> inquiries = inquiryService.getCustomerInquiries (customerName);
 
 	if (inquiries != null)
 	{
-	    model.addAttribute ("InquiryList", inquiries);
-	    
+	    return inquiries;
 	}
 	else
 	{
-	    String message = "Error while processing request GET:/customer/" + customerName
-		    + "/inquiries: No such customer";
-	    model.addAttribute (ERROR_FIELD, message);
+	    httpResponse.setStatus (HttpStatus.NO_CONTENT.value ());
+	    return null;
 	}
     }
 
 
     @RequestMapping (value = "/customers/{customerName}/inquiries/{inquiryId}", method = RequestMethod.GET)
-    public void getCustomerInquirie (@PathVariable ("customerName") String customerName,
-	    @PathVariable ("inquiryId") Long inquiryId, Model model)
+    @ResponseBody
+    public Inquiry getCustomerInquirie (@PathVariable ("customerName") String customerName,
+	    @PathVariable ("inquiryId") Long inquiryId, Model model, HttpServletResponse httpResponse)
     {
 	Inquiry inquiry = inquiryService.getInquiryByIdCustomerName (inquiryId, customerName);
 	if (inquiry == null)
 	{
-	    model.addAttribute (ERROR_FIELD, "Error while processing request GET:/customer/" + customerName + "/inquiries/"
- + inquiryId + ": No such inquiry, or wrong customer variable");
+	    httpResponse.setStatus (HttpStatus.NO_CONTENT.value ());
+	    return null;
 	}
 	else
 	{
-	    model.addAttribute (DATA_FIELD, inquiry);
+	    return inquiry;
 	}
     }
 
 
     @CrossOrigin
     @RequestMapping (value = "/customers/{customerName}/inquiries", method = RequestMethod.POST)
-    public void addCustomerInquiries (@RequestBody Inquiry inquiry,
+    public Inquiry addCustomerInquiries (@RequestBody Inquiry inquiry,
 	    @PathVariable ("customerName") String customerName, HttpServletResponse httpResponse,
  WebRequest request,
 	    Model model)
@@ -85,19 +87,17 @@ public class inquiryController
 	try
 	{
 	    newInquiry = inquiryService.addInquiry (inquiry);
+	    httpResponse.setStatus (HttpStatus.CREATED.value ());
+	    httpResponse.setHeader ("Location", request.getContextPath () + "/task/customers/" + customerName
+		    + "/inquiries/" + newInquiry.getId ());
+	    httpResponse.setCharacterEncoding ("application/json; UTF-8");
+	    return newInquiry;
 	}
 	catch (Exception e)
 	{
-	    String message = "Error while creating new inquiry: [%1$s]";
-	    model.addAttribute (ERROR_FIELD, message);
+	    httpResponse.setStatus (HttpStatus.UNPROCESSABLE_ENTITY.value ());
+	    return null;
 	}
-
-	httpResponse.setStatus (HttpStatus.CREATED.value ());
-	httpResponse.setHeader ("Location",
-		request.getContextPath () + "/task/customers/" + customerName + "/inquiries/" + newInquiry.getId ());
-	httpResponse.setCharacterEncoding ("application/json; UTF-8");
-
-	model.addAttribute (DATA_FIELD, newInquiry);
     }
 
 
