@@ -29,7 +29,7 @@ public class Inquiry extends BaseEntity<Long>
     private String customer;
 
     @OneToMany (mappedBy = "inquiry", targetEntity = InquiryAttribute.class, cascade = CascadeType.ALL,
-	    fetch = FetchType.EAGER)
+	    orphanRemoval = true, fetch = FetchType.EAGER)
     private List<InquiryAttribute> inquiryAttributes;
 
     @OneToOne

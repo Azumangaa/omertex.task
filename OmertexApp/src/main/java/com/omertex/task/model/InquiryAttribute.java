@@ -2,6 +2,7 @@ package com.omertex.task.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -20,8 +21,8 @@ public class InquiryAttribute extends BaseEntity<Long>
     @Override
     public String toString ()
     {
-	Long id = (inquiry != null) ? inquiry.getId () : null;
-	return "InquiryAttribute [id=" + id + ", name=" + name + ", value=" + value + ", inquiry=" + id + "]";
+	Long inquiryId = (inquiry != null) ? inquiry.getId () : null;
+	return "InquiryAttribute [id=" + id + ", name=" + name + ", value=" + value + ", inquiry=" + inquiryId + "]";
     }
 
     @Id
@@ -34,8 +35,8 @@ public class InquiryAttribute extends BaseEntity<Long>
     @Column (name = "value", length = 255)
     private String value;
 
-    @ManyToOne (optional = false)
-    @JoinColumn (name = "inquiry_id", insertable = true, referencedColumnName = "id")
+    @ManyToOne (optional = false, fetch = FetchType.EAGER)
+    @JoinColumn (name = "inquiry_id", insertable = true)
     private Inquiry inquiry;
 
 
