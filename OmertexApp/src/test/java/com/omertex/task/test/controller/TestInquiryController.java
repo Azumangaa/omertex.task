@@ -76,10 +76,13 @@ public class TestInquiryController
     public void shouldAddNewInquiry () throws Exception
     {
 	Inquiry testInquirie = createTestInquiries (1L).get (0);
+
 	RepositoryInquiryService mockInquiryService = mock (RepositoryInquiryService.class);
 	InquiryController controller = new InquiryController (mockInquiryService);
 	MockMvc mvc = standaloneSetup (controller).build ();
+
     }
+
 
     public List<Inquiry> createTestInquiries (Long count)
     {

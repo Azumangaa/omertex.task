@@ -32,11 +32,17 @@ public class RepositoryInquiryAttributeService
     }
 
 
-    public InquiryAttribute add (InquiryAttribute inquiryAttribute)
+    public InquiryAttribute add (InquiryAttribute inquiryAttribute) throws Exception
     {
-	if (inquiryAttribute != null)
+	try
+	{
 	    return repository.saveAndFlush (inquiryAttribute);
-	return null;
+	}
+	catch (Exception e)
+	{
+	    throw new Exception ("Wrong attribute data");
+	}
+
     }
 
 

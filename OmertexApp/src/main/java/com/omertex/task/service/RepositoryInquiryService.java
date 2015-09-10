@@ -5,24 +5,29 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.omertex.task.dto.InquiryDTO;
 import com.omertex.task.model.Inquiry;
 import com.omertex.task.model.InquiryAttribute;
+import com.omertex.task.model.Topic;
 import com.omertex.task.repository.InquiryRepository;
 
 @Service
 public class RepositoryInquiryService
 {
     private InquiryRepository inquiryRepository;
-    private RepositoryInquiryAttributeService inquiryAttributeRepository;
+    private RepositoryInquiryAttributeService inquiryAttributeService;
+    private RepositoryTopicService topicService;
 
 
     @Autowired
     public RepositoryInquiryService (InquiryRepository repository,
-	    RepositoryInquiryAttributeService inquiryAttributeRepository)
+	    RepositoryInquiryAttributeService inquiryAttributeRepository, RepositoryTopicService topicService)
     {
 	this.inquiryRepository = repository;
-	this.inquiryAttributeRepository = inquiryAttributeRepository;
+	this.inquiryAttributeService = inquiryAttributeRepository;
+	this.topicService = topicService;
     }
 
 
@@ -42,7 +47,7 @@ public class RepositoryInquiryService
 	    for (InquiryAttribute inquiryAttribute : attributes)
 	    {
 		inquiryAttribute.setInquiry (inquiry);
-		inquiryAttributeRepository.add (inquiryAttribute);
+		inquiryAttributeService.add (inquiryAttribute);
 	    }
 	}
 	inquiry.setInquiryAttributes (attributes);
@@ -75,17 +80,54 @@ public class RepositoryInquiryService
     }
 
 
-    public Inquiry updateInquiry (Inquiry inquiry)
+    public Inquiry updateInquiry (Inquiry inquiry) throws Exception
     {
-	inquiryAttributeRepository.deleteWhereInquiry (inquiry);
+	inquiryAttributeService.deleteWhereInquiry (inquiry);
 	List<InquiryAttribute> newAttributeList = new ArrayList<InquiryAttribute> (0);
 	for (InquiryAttribute attribute : inquiry.getInquiryAttributes ())
 	{
 	    attribute.setInquiry (inquiry);
-	    newAttributeList.add (inquiryAttributeRepository.add (attribute));
+	    newAttributeList.add (inquiryAttributeService.add (attribute));
 	}
 	inquiryRepository.save (inquiry);
 	inquiry.setInquiryAttributes (newAttributeList);
 	return inquiry;
+    }
+
+
+    @Transactional (rollbackFor = Exception.class)
+    public Inquiry addInquiry (InquiryDTO inquiryData) throws Exception
+    {
+	String description = inquiryData.getDescription ();
+	if (description == null)
+	    throw new Exception ("Empty description field");
+	
+	String customer = inquiryData.getCustomer ();
+	if (customer == null)
+	    throw new Exception ("Empty customer field");
+	
+	Topic topic = topicService.getTopic (inquiryData.getTopicId ());
+	if (topic == null)
+	    throw new Exception ("Wrong topicId");
+	
+	Inquiry savedInquiry;
+	try {
+	    savedInquiry = inquiryRepository.save (Inquiry.getBuilder ().customer (customer).description (description).topic (topic)
+		    .build ());
+	} catch(Exception e) {
+	    throw new Exception ("Wrong inquiry attribute data");
+	}
+	
+	
+	List<InquiryAttribute> savedInquiryAttributes = new ArrayList<InquiryAttribute> (0);
+	
+	for (InquiryAttribute attr : inquiryData.getAttributes ())
+	{
+	    attr.setInquiry (savedInquiry);
+	    savedInquiryAttributes.add (inquiryAttributeService.add (attr));
+	}
+	savedInquiry.setInquiryAttributes (savedInquiryAttributes);
+	
+	return savedInquiry;
     }
 }

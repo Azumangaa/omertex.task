@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 
+import com.omertex.task.dto.InquiryDTO;
 import com.omertex.task.model.Inquiry;
 import com.omertex.task.service.RepositoryInquiryService;
 
@@ -76,17 +77,17 @@ public class InquiryController
 
     @CrossOrigin
     @RequestMapping (value = "/customers/{customerName}/inquiries", method = RequestMethod.POST)
-    public Inquiry addCustomerInquiries (@RequestBody Inquiry inquiry,
+    public Inquiry addCustomerInquiries (@RequestBody InquiryDTO inquiryData,
 	    @PathVariable ("customerName") String customerName, HttpServletResponse httpResponse,
  WebRequest request,
 	    Model model)
     {
 
 	Inquiry newInquiry = null;
-	inquiry.setCustomer (customerName);
+	inquiryData.setCustomer (customerName);
 	try
 	{
-	    newInquiry = inquiryService.addInquiry (inquiry);
+	    newInquiry = inquiryService.addInquiry (inquiryData);
 	    httpResponse.setStatus (HttpStatus.CREATED.value ());
 	    httpResponse.setHeader ("Location", request.getContextPath () + "/task/customers/" + customerName
 		    + "/inquiries/" + newInquiry.getId ());
@@ -96,6 +97,7 @@ public class InquiryController
 	catch (Exception e)
 	{
 	    httpResponse.setStatus (HttpStatus.UNPROCESSABLE_ENTITY.value ());
+	    httpResponse.setHeader ("ErrorDescription", e.getMessage ());
 	    return null;
 	}
     }

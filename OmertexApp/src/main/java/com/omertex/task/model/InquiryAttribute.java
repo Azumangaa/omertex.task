@@ -7,7 +7,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -29,10 +31,14 @@ public class InquiryAttribute extends BaseEntity<Long>
     @GeneratedValue
     private Long id;
 
-    @Column (name = "name", length = 255)
+    @NotEmpty
+    @NotNull
+    @Column (name = "name", length = 255, nullable = false)
     private String name;
 
-    @Column (name = "value", length = 255)
+    @NotNull
+    @NotEmpty
+    @Column (name = "value", length = 255, nullable = false)
     private String value;
 
     @ManyToOne (optional = false, fetch = FetchType.EAGER)

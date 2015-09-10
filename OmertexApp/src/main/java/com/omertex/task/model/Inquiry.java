@@ -10,21 +10,24 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.omertex.task.utils.InquiryDeserializer;
+import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
-@JsonDeserialize (using = InquiryDeserializer.class)
 public class Inquiry extends BaseEntity<Long>
 {
     @Id
     @GeneratedValue
     private Long id;
 
+    @NotEmpty
+    @NotNull
     @Column (name = "description", nullable = false)
     private String description;
 
+    @NotEmpty
+    @NotNull
     @Column (name = "customer", nullable = false)
     private String customer;
 
