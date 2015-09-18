@@ -118,7 +118,7 @@ public class RepositoryInquiryService
 	    throw new Exception ("Wrong inquiry attribute data");
 	}
 	
-	
+	/* TODO check inquiry attribute data */
 	List<InquiryAttribute> savedInquiryAttributes = new ArrayList<InquiryAttribute> (0);
 	
 	for (InquiryAttribute attr : inquiryData.getAttributes ())
@@ -129,5 +129,42 @@ public class RepositoryInquiryService
 	savedInquiry.setInquiryAttributes (savedInquiryAttributes);
 	
 	return savedInquiry;
+    }
+
+
+    @Transactional
+    public Inquiry updateInquiry (Inquiry inquiryToUpdate, InquiryDTO newInquiryData) throws Exception
+    {
+	if (newInquiryData.getDescription () != null)
+	    inquiryToUpdate.setDescription (newInquiryData.getDescription ());
+
+	if (newInquiryData.getCustomer () != null)
+	    inquiryToUpdate.setCustomer (newInquiryData.getCustomer ());
+
+	if (newInquiryData.getTopicId () != null)
+	{
+	    Topic topic = topicService.getTopic (newInquiryData.getTopicId ());
+	    if (topic == null)
+		throw new Exception ("Wrong topicId");
+	    inquiryToUpdate.setTopic (topic);
+	}
+
+	/* TODO check inquiry attribute data */
+	if (newInquiryData.getAttributes () != null)
+	{
+	    inquiryAttributeService.deleteWhereInquiry (inquiryToUpdate);
+	    List<InquiryAttribute> savedInquiryAttributes = new ArrayList<InquiryAttribute> (0);
+
+	    for (InquiryAttribute attr : newInquiryData.getAttributes ())
+	    {
+		attr.setInquiry (inquiryToUpdate);
+		savedInquiryAttributes.add (inquiryAttributeService.add (attr));
+	    }
+	    inquiryToUpdate.setInquiryAttributes (savedInquiryAttributes);
+	}
+
+	inquiryRepository.save (inquiryToUpdate);
+
+	return null;
     }
 }

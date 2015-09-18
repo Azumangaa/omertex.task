@@ -26,8 +26,7 @@ public class InquiryController
 {
     private RepositoryInquiryService inquiryService;
 
-    private static final String DATA_FIELD = "data";
-    private static final String ERROR_FIELD = "error";
+    private static final String ERROR_HEADER = "ErrorDescription";
 
 
     @Autowired
@@ -59,7 +58,7 @@ public class InquiryController
 
     @RequestMapping (value = "/customers/{customerName}/inquiries/{inquiryId}", method = RequestMethod.GET)
     @ResponseBody
-    public Inquiry getCustomerInquirie (@PathVariable ("customerName") String customerName,
+    public Inquiry getCustomerInquiry (@PathVariable ("customerName") String customerName,
 	    @PathVariable ("inquiryId") Long inquiryId, Model model, HttpServletResponse httpResponse)
     {
 	Inquiry inquiry = inquiryService.getInquiryByIdCustomerName (inquiryId, customerName);
@@ -76,8 +75,9 @@ public class InquiryController
 
 
     @CrossOrigin
+    @ResponseBody
     @RequestMapping (value = "/customers/{customerName}/inquiries", method = RequestMethod.POST)
-    public Inquiry addCustomerInquiries (@RequestBody InquiryDTO inquiryData,
+    public Inquiry addCustomerInquiry (@RequestBody InquiryDTO inquiryData,
 	    @PathVariable ("customerName") String customerName, HttpServletResponse httpResponse,
  WebRequest request,
 	    Model model)
@@ -97,68 +97,64 @@ public class InquiryController
 	catch (Exception e)
 	{
 	    httpResponse.setStatus (HttpStatus.UNPROCESSABLE_ENTITY.value ());
-	    httpResponse.setHeader ("ErrorDescription", e.getMessage ());
+	    String message = e.getMessage ();
+	    httpResponse.setHeader (ERROR_HEADER, "" + message);
 	    return null;
 	}
     }
 
 
     @RequestMapping (value = "/customers/{customerName}/inquiries/{inquiryId}", method = RequestMethod.PUT)
-    public void updateCustomerInquirie (@RequestBody Inquiry updatedInquiry,
+    public Inquiry updateCustomerInquiry (@RequestBody InquiryDTO newInquiryData,
 	    @PathVariable ("customerName") String customerName, @PathVariable ("inquiryId") Long inquiryId,
 	    HttpServletResponse httpResponse, Model model)
     {
 	Inquiry inquiryToUpdate = inquiryService.getInquiryByIdCustomerName (inquiryId, customerName);
+
 	if (inquiryToUpdate == null)
 	{
-	    model.addAttribute (ERROR_FIELD, "Error while processing request PUT:/customer/" + customerName
-		    + "/inquiries/"
- + inquiryId + ": No such inquiry, or wrong customer variable");
+	    httpResponse.setStatus (HttpStatus.GONE.value ());
+	    httpResponse.setHeader (ERROR_HEADER,
+		    "Inquiry with id " + inquiryId + " and customer " + customerName + " doesn't exist");
+	    return null;
 	}
 
 	Inquiry inquiry = null;
-	inquiryToUpdate.setDescription (updatedInquiry.getDescription ());
-	inquiryToUpdate.setTopic (updatedInquiry.getTopic ());
-	inquiryToUpdate.setInquiryAttributes (updatedInquiry.getInquiryAttributes ());
-	try
-	{
-	    inquiry = inquiryService.updateInquiry (inquiryToUpdate);
-	}
-	catch (Exception e)
-	{
-	    String message = "Error while updating inquiry: [%1$s]";
-	    model.addAttribute (ERROR_FIELD, message);
-	}
-
-	httpResponse.setStatus (HttpStatus.OK.value ());
-	model.addAttribute (DATA_FIELD, inquiry);
-
-    }
-
-
-    @RequestMapping (value = "/customers/{customerName}/inquiries/{inquiryId}", method = RequestMethod.DELETE)
-    public void deleteCustomerInquirie (@PathVariable ("customerName") String customerName,
-	    @PathVariable ("inquiryId") Long inquiryId, HttpServletResponse httpResponse, Model model)
-    {
-	Inquiry inquiryToUpdate = inquiryService.getInquiryByIdCustomerName (inquiryId, customerName);
-	if (inquiryToUpdate == null)
-	{
-	    model.addAttribute (ERROR_FIELD, "Error while processing request DELETE:/customer/" + customerName
-		    + "/inquiries/" + inquiryId + ": No such inquiry, or wrong customer variable");
-	}
 
 	try
 	{
-	    inquiryService.deleteInquiry (inquiryId);
+	    inquiry = inquiryService.updateInquiry (inquiryToUpdate, newInquiryData);
 	}
 	catch (Exception e)
 	{
-	    String message = "Error while deleting inquiry [%1$s]";
-	    model.addAttribute (ERROR_FIELD, String.format (message, e.toString ()));
+	    httpResponse.addHeader (ERROR_HEADER, e.getMessage ());
+	    httpResponse.setStatus (HttpStatus.UNPROCESSABLE_ENTITY.value ());
+	    return null;
 	}
 
 	httpResponse.setStatus (HttpStatus.OK.value ());
-	model.addAttribute (DATA_FIELD, null);
-    }
+	return inquiry;
 
+    }
+/*
+ * 
+ * @RequestMapping (value = "/customers/{customerName}/inquiries/{inquiryId}",
+ * method = RequestMethod.DELETE) public void deleteCustomerInquirie
+ * (@PathVariable ("customerName") String customerName,
+ * 
+ * @PathVariable ("inquiryId") Long inquiryId, HttpServletResponse httpResponse,
+ * Model model) { Inquiry inquiryToUpdate =
+ * inquiryService.getInquiryByIdCustomerName (inquiryId, customerName); if
+ * (inquiryToUpdate == null) { model.addAttribute (ERROR_FIELD,
+ * "Error while processing request DELETE:/customer/" + customerName +
+ * "/inquiries/" + inquiryId + ": No such inquiry, or wrong customer variable");
+ * }
+ * 
+ * try { inquiryService.deleteInquiry (inquiryId); } catch (Exception e) {
+ * String message = "Error while deleting inquiry [%1$s]"; model.addAttribute
+ * (ERROR_FIELD, String.format (message, e.toString ())); }
+ * 
+ * httpResponse.setStatus (HttpStatus.OK.value ()); model.addAttribute
+ * (DATA_FIELD, null); }
+ */
 }
