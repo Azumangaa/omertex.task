@@ -55,7 +55,7 @@ public class RepositoryInquiryService
     }
 
 
-    public void deleteInquiry (Long inquiryId) throws Exception
+    public void deleteInquiry (Long inquiryId)
     {
 	inquiryRepository.delete (inquiryId);
     }

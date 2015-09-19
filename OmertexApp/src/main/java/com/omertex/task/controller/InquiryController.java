@@ -136,25 +136,25 @@ public class InquiryController
 	return inquiry;
 
     }
-/*
- * 
- * @RequestMapping (value = "/customers/{customerName}/inquiries/{inquiryId}",
- * method = RequestMethod.DELETE) public void deleteCustomerInquirie
- * (@PathVariable ("customerName") String customerName,
- * 
- * @PathVariable ("inquiryId") Long inquiryId, HttpServletResponse httpResponse,
- * Model model) { Inquiry inquiryToUpdate =
- * inquiryService.getInquiryByIdCustomerName (inquiryId, customerName); if
- * (inquiryToUpdate == null) { model.addAttribute (ERROR_FIELD,
- * "Error while processing request DELETE:/customer/" + customerName +
- * "/inquiries/" + inquiryId + ": No such inquiry, or wrong customer variable");
- * }
- * 
- * try { inquiryService.deleteInquiry (inquiryId); } catch (Exception e) {
- * String message = "Error while deleting inquiry [%1$s]"; model.addAttribute
- * (ERROR_FIELD, String.format (message, e.toString ())); }
- * 
- * httpResponse.setStatus (HttpStatus.OK.value ()); model.addAttribute
- * (DATA_FIELD, null); }
- */
+
+
+    @RequestMapping (value = "/customers/{customerName}/inquiries/{inquiryId}", method = RequestMethod.DELETE)
+    public void deleteCustomerInquiry (@PathVariable ("customerName") String customerName,
+
+    @PathVariable ("inquiryId") Long inquiryId, HttpServletResponse httpResponse, Model model)
+    {
+	Inquiry inquiryToUpdate = inquiryService.getInquiryByIdCustomerName (inquiryId, customerName);
+	if (inquiryToUpdate == null)
+	{
+	    httpResponse.setStatus (HttpStatus.GONE.value ());
+	    httpResponse.addHeader (ERROR_HEADER, "Error while processing request DELETE:/customer/" + customerName
+		    + "/inquiries/" + inquiryId + ": No such inquiry, or wrong customer");
+	    return;
+	}
+
+	inquiryService.deleteInquiry (inquiryId);
+
+	httpResponse.setStatus (HttpStatus.OK.value ());
+    }
+
 }
