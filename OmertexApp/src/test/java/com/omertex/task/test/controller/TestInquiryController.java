@@ -62,7 +62,7 @@ public class TestInquiryController
     }
 
 
-    public List<Inquiry> createTestInquiries (Long count)
+    public static List<Inquiry> createTestInquiries (Long count)
     {
 	List<Inquiry> testInquiries = new ArrayList<Inquiry> (0);
 	for (Long i = 0L; i < count; i++)

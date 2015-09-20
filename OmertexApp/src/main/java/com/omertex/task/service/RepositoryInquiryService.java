@@ -31,30 +31,6 @@ public class RepositoryInquiryService
     }
 
 
-    public Inquiry getInquiryById (Long inquiryId)
-    {
-	return inquiryRepository.findOne (inquiryId);
-    }
-
-
-    public Inquiry addInquiry (Inquiry inquiry) throws Exception
-    {
-	List<InquiryAttribute> attributes = inquiry.getInquiryAttributes ();
-	inquiry.setInquiryAttributes (null);
-	inquiry = inquiryRepository.saveAndFlush (inquiry);
-	if (attributes != null)
-	{
-	    for (InquiryAttribute inquiryAttribute : attributes)
-	    {
-		inquiryAttribute.setInquiry (inquiry);
-		inquiryAttributeService.add (inquiryAttribute);
-	    }
-	}
-	inquiry.setInquiryAttributes (attributes);
-	return inquiry;
-    }
-
-
     public void deleteInquiry (Long inquiryId)
     {
 	inquiryRepository.delete (inquiryId);
@@ -77,21 +53,6 @@ public class RepositoryInquiryService
 	    return inquiry;
 	}
 	return null;
-    }
-
-
-    public Inquiry updateInquiry (Inquiry inquiry) throws Exception
-    {
-	inquiryAttributeService.deleteWhereInquiry (inquiry);
-	List<InquiryAttribute> newAttributeList = new ArrayList<InquiryAttribute> (0);
-	for (InquiryAttribute attribute : inquiry.getInquiryAttributes ())
-	{
-	    attribute.setInquiry (inquiry);
-	    newAttributeList.add (inquiryAttributeService.add (attribute));
-	}
-	inquiryRepository.save (inquiry);
-	inquiry.setInquiryAttributes (newAttributeList);
-	return inquiry;
     }
 
 
@@ -118,7 +79,6 @@ public class RepositoryInquiryService
 	    throw new Exception ("Wrong inquiry attribute data");
 	}
 	
-	/* TODO check inquiry attribute data */
 	List<InquiryAttribute> savedInquiryAttributes = new ArrayList<InquiryAttribute> (0);
 	
 	for (InquiryAttribute attr : inquiryData.getAttributes ())
@@ -130,6 +90,7 @@ public class RepositoryInquiryService
 	
 	return savedInquiry;
     }
+
 
 
     @Transactional
