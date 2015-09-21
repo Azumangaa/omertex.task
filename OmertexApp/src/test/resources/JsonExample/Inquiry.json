@@ -1,0 +1,20 @@
+//Inquiry with attributes
+{
+    "description":"This is my cool inquiry",
+        "topicId": 1,
+     "inquiryAttributes":{
+      "0":{
+         "name":"tes2t",
+         "value":"tes2t"},
+        "1":{
+         "name":"te1st",
+         "value":"te1st"}
+     }
+    
+}
+
+//Inquiry without attributes
+{
+    "description":"This is my cool inquiry",
+    "topicId": 1    
+}
