@@ -22,12 +22,13 @@ public class RepositoryInquiryService
 
 
     @Autowired
-    public RepositoryInquiryService (InquiryRepository repository,
-	    RepositoryInquiryAttributeService inquiryAttributeRepository, RepositoryTopicService topicService)
+    public RepositoryInquiryService (
+RepositoryInquiryAttributeService inquiryAttributeRepository,
+	    RepositoryTopicService topicService, InquiryRepository inquiryRepository)
     {
-	this.inquiryRepository = repository;
 	this.inquiryAttributeService = inquiryAttributeRepository;
 	this.topicService = topicService;
+	this.inquiryRepository = inquiryRepository;
     }
 
 
@@ -76,7 +77,7 @@ public class RepositoryInquiryService
 	    savedInquiry = inquiryRepository.save (Inquiry.getBuilder ().customer (customer).description (description).topic (topic)
 		    .build ());
 	} catch(Exception e) {
-	    throw new Exception ("Wrong inquiry attribute data");
+	    throw e;
 	}
 	
 	List<InquiryAttribute> savedInquiryAttributes = new ArrayList<InquiryAttribute> (0);

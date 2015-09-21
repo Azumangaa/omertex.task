@@ -19,7 +19,7 @@ public class RepositoryTopicService
     }
 
 
-    public Topic getTopic (Long id) throws Exception
+    public Topic getTopic (Long id)
     {
 	return repository.findOne (id);
     }

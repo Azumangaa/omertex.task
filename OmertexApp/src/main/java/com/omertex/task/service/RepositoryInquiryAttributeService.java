@@ -16,6 +16,7 @@ public class RepositoryInquiryAttributeService
     InquiryAttributeRepository repository;
     private static final Logger logger_c = Logger.getLogger (RepositoryInquiryAttributeService.class);
 
+
     @Autowired
     public RepositoryInquiryAttributeService (InquiryAttributeRepository repository)
     {

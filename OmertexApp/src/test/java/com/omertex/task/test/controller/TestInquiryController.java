@@ -76,7 +76,7 @@ public class TestInquiryController
     }
 
 
-    public InquiryDTO createTestInquiryDTO ()
+    public static InquiryDTO createTestInquiryDTO ()
     {
 	InquiryDTO inquiryDTO = new InquiryDTO ();
 	inquiryDTO.setCustomer ("Test");
