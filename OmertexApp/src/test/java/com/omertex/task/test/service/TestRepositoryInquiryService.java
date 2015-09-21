@@ -124,4 +124,60 @@ public class TestRepositoryInquiryService extends BasicServiceTest
 	Assert.assertThat (newInquiry.getDescription (), Matchers.equalTo (inquiry.getDescription ()));
 	Assert.assertEquals (newInquiry.getTopic (), topic);
     }
+
+
+    @Test
+    public void onUpdateInquiryShoudlThrowWrongTopicId ()
+    {
+	Topic topic = topicRepo.save (Topic.getBuilder ().name ("TestTopic").build ());
+	Mockito.when (topicService.getTopic (isA (Long.class))).thenReturn (null);
+	Inquiry oldInquiry = inquiryRepo
+		.save (Inquiry.getBuilder ().customer ("Test").description ("Test").topic (topic).build ());
+
+	InquiryDTO newData = new InquiryDTO ();
+	newData.setTopicId (-1L);
+
+	Exception ex = null;
+	try
+	{
+	    service.updateInquiry (oldInquiry, newData);
+	}
+	catch (Exception e)
+	{
+	    ex = e;
+	}
+
+	Assert.assertNotNull (ex);
+	Assert.assertThat (ex.getMessage (), Matchers.equalTo ("Wrong topicId"));
+    }
+
+
+    @Test
+    public void onUpdateInquiryShouldUpdateInquiry ()
+    {
+	Topic topic = topicRepo.save (Topic.getBuilder ().name ("TestTopic").build ());
+	Mockito.when (topicService.getTopic (isA (Long.class))).thenReturn (topic);
+	Inquiry oldInquiry = inquiryRepo
+		.save (Inquiry.getBuilder ().customer ("testInquiry").description ("Test").topic (topic).build ());
+
+	InquiryDTO newData = TestInquiryController.createTestInquiryDTO ();
+	Inquiry updatedInquiry = null;
+	Exception ex = null;
+	try
+	{
+	    updatedInquiry = service.updateInquiry (oldInquiry, newData);
+	}
+	catch (Exception e)
+	{
+	    ex = e;
+	}
+
+	Assert.assertNull (ex);
+	Assert.assertNotNull (updatedInquiry);
+	Assert.assertNotNull (updatedInquiry.getId ());
+	Assert.assertThat (updatedInquiry.getId (), Matchers.equalTo (oldInquiry.getId ()));
+	Assert.assertThat (updatedInquiry.getCustomer (), Matchers.equalTo (newData.getCustomer ()));
+	Assert.assertThat (updatedInquiry.getDescription (), Matchers.equalTo (newData.getDescription ()));
+	Assert.assertEquals (updatedInquiry.getTopic (), topic);
+    }
 }

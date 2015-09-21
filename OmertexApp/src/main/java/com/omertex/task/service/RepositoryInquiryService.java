@@ -111,7 +111,6 @@ RepositoryInquiryAttributeService inquiryAttributeRepository,
 	    inquiryToUpdate.setTopic (topic);
 	}
 
-	/* TODO check inquiry attribute data */
 	if (newInquiryData.getAttributes () != null)
 	{
 	    inquiryAttributeService.deleteWhereInquiry (inquiryToUpdate);
@@ -125,8 +124,6 @@ RepositoryInquiryAttributeService inquiryAttributeRepository,
 	    inquiryToUpdate.setInquiryAttributes (savedInquiryAttributes);
 	}
 
-	inquiryRepository.save (inquiryToUpdate);
-
-	return null;
+	return inquiryRepository.save (inquiryToUpdate);
     }
 }
